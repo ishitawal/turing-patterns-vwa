@@ -1,3 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/videos/trial/480p15/partial_movie_files/LaTeXExample/1185818338_2046430697_223132457.mp4'
-file 'file:C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/videos/trial/480p15/partial_movie_files/LaTeXExample/624642324_784179552_81143406.mp4'
