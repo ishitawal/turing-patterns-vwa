@@ -1,0 +1,6 @@
+# This file is used internally by FFMPEG.
+file 'file:C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/videos/rds/480p15/partial_movie_files/subtitle_rds_scene/1185818338_2268332985_631829896.mp4'
+file 'file:C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/videos/rds/480p15/partial_movie_files/subtitle_rds_scene/1185818338_362423322_4131132508.mp4'
+file 'file:C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/videos/rds/480p15/partial_movie_files/subtitle_rds_scene/624642324_2919340033_314185366.mp4'
+file 'file:C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/videos/rds/480p15/partial_movie_files/subtitle_rds_scene/624642324_3360228102_597258605.mp4'
+file 'file:C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/videos/rds/480p15/partial_movie_files/subtitle_rds_scene/624642324_2919340033_3781034893.mp4'
