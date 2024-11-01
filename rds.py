@@ -126,11 +126,50 @@ class diffusion_scene(Scene):
         arrow = Arrow(start=[-4,-3,0], end=[4,-3,0], buff=0.0)
         arrow_text = Text("concentration gradient", font_size=20, slant=ITALIC).next_to(arrow, DOWN*0.75)
 
+        molecule = Circle(fill_opacity=0, stroke_color=BLUE, radius=0.1)
+
+        no_dif_pos = [
+            [-2.125,1.375,0],[-2,0.625,0],[-1.625,1.25,0],[-2.5,0.875,0],[-2.2,0.125,0],[-1.5,0.25,0]
+        ]
+        dif_pos = [
+            [-3.5, 1.0, 0],[-2.5, -0.2, 0],[-1.75, 1.25, 0],[0.0, 0.75, 0],[2.25, -0.25, 0],[3.5, 1.0, 0]  
+        ]
+
+        no_dif_group = VGroup(*[molecule.copy().shift(pos) for pos in no_dif_pos]).shift(LEFT+0.25 *DOWN)
+        dif_group = VGroup(*[molecule.copy().shift(pos) for pos in dif_pos])
+
+        parameteres_text = MarkupText(f'''
+                                      - substance
+                                      - size
+                                      - medium
+                                      ''', font_size=26).shift(RIGHT*0+DOWN*2)
+        
+        Dc = MarkupText('diffusion coefficient ... D<sub>c</sub>  :', font_size=28).shift(LEFT*3.75+ DOWN*2)
+
+        dif_condition = MarkupText('D<sub>I</sub> > D<sub>A</sub>', font_size= 35, weight=SEMIBOLD).shift(RIGHT*3.5+DOWN*2)
+
+        highlight = Rectangle(color=YELLOW).surround(dif_condition, buff=0.5)
 
         self.add(title_reaction,box,act_inb_text)
         self.wait(1)
         self.play(Transform(title_reaction,title_diffusion), Transform(act_inb_text,diffusion_text))
         self.wait(1)
         self.play(ReplacementTransform(box,box_dif), Create(tri_dif))
-        self.add(arrow,arrow_text)
+        self.wait(1)
+        self.play(Create(arrow),Write(arrow_text))
+        self.wait(1)
+        self.play(FadeIn(no_dif_group))
+        self.wait(1)
+        self.play(*[
+             ReplacementTransform(no_dif_group[i], no_dif_group[i].copy().move_to(dif_group[i].get_center()))
+            for i in range(len(no_dif_group))
+            ],run_time=2.5)                    #Transform not quite right - position change wrong --> change later
+        self.wait(1)
+        self.play(FadeOut(tri_dif,arrow,arrow_text))
+        self.wait(1)
+        self.play(Write(parameteres_text))
+        self.play(Write(Dc))
+        self.wait(1)
+        self.play(Write(dif_condition))
+        self.play(Create(highlight))
         self.wait(3)
