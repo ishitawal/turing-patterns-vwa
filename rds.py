@@ -3,8 +3,15 @@ from manim import *
 act = Circle(fill_opacity=0, stroke_color=GREEN, radius=0.2)
 inb = Circle(fill_opacity=1, stroke_color=RED, radius=0.2)
 title_sub = Text("Reaction-Diffusion System", font_size=40).shift(UP*3 + LEFT*3.5)
+title_reaction =MarkupText(
+            f'Reaction<span fgcolor="{WHITE}">-Diffusion System</span>', color=YELLOW, font_size=40).shift(UP * 3 + LEFT * 3.5)
+title_diffusion =MarkupText(
+            f'Reaction-<span fgcolor="{YELLOW}">Diffusion</span> System', color=WHITE, font_size=40).shift(UP * 3 + LEFT * 3.5)
 act_inb_text  = Text("Activator-Inhibitor Dynamic:", font_size=30, weight=SEMIBOLD).shift(UP*2 + LEFT*3)
+diffusion_text = Text("Diffusion:", font_size=30, weight=SEMIBOLD).shift(UP * 2 + LEFT * 4)
 box = Rectangle(width=7.0, height=4.0).shift(0.5*DOWN)
+box_dif= Rectangle(width=8.0, height=2.0).shift(0.5*UP)
+
 
 class subtitle_rds_scene(Scene):
     def construct(self):
@@ -24,7 +31,7 @@ class morphogens_scene(Scene):
             [1.25, 1, 0],[-1.25, 0.5, 0],[-3, -0.25, 0],[2.75, -0.75, 0],[-0.5, -0.75, 0],[1, -1.25, 0],[-2.25, -2, 0]
         ]
         act_pos = [
-                [-2.5,1,0],[-2, -0.85, 0],[1.75, -0.5, 0],[2.5, 0.8, 0],[-0.2, -2, 0],[2, -1.8, 0]
+                [-2.5,1,0],[-2, -0.85, 0],[1.75, -0.5, 0],[2.5, 0.8, 0],[-0.2, -2, 0],[2, -1.8, 0],[0,0,0]
         ]
 
         morphogens = VGroup(*[act.copy().shift(pos) for pos in act_pos], *[inb.copy().shift(pos) for pos in inb_pos])
@@ -48,16 +55,11 @@ class morphogens_scene(Scene):
 
 class act_inb_dynamics_scene(Scene):
     def construct(self):
-        title_reaction =MarkupText(
-            f'Reaction<span fgcolor="{WHITE}">-Diffusion System</span>', color=YELLOW, font_size=40).shift(UP * 3 + LEFT * 3.5)
-        
         legend_text = Text("... morphogens", font_size=20, weight=BOOK).shift([-1.25,-3,0])
 
         act_text = Text("Activator", color=GREEN, font_size=26).shift(4.75*LEFT)
         inb_text = Text("Inhibitor", color=RED, font_size=26).shift(4.75*RIGHT)
         auto_cat = Text("'Autocatalysis'", color=GREEN, font_size=24, slant=ITALIC).shift(4.75*LEFT+DOWN)
-        act = Circle(fill_opacity=0, stroke_color=GREEN, radius=0.2)
-        inb = Circle(fill_opacity=1, stroke_color=RED, radius=0.2)
 
         act_7 = act.copy().shift([-0.5, 0.15, 0])
         act_8 = act.copy().shift([-0.8, -0.5, 0])
@@ -100,15 +102,6 @@ class act_inb_dynamics_scene(Scene):
 
 class diffusion_scene(Scene):
     def construct(self):
-        title_reaction =MarkupText(
-            f'Reaction<span fgcolor="{WHITE}">-Diffusion System</span>', color=YELLOW, font_size=40).shift(UP * 3 + LEFT * 3.5)
-        title_diffusion =MarkupText(
-            f'Reaction-<span fgcolor="{YELLOW}">Diffusion</span> System', color=WHITE, font_size=40).shift(UP * 3 + LEFT * 3.5)
-
-        diffusion_text = Text("Diffusion:", font_size=30, weight=SEMIBOLD).shift(UP * 2 + LEFT * 4)
-
-        box_dif= Rectangle(width=8.0, height=2.0).shift(0.5*UP)
-
         tri_dif= Polygon([-4,-2.5,0],[4,-2.5,0],[-4,-1.5,0])
         tri_dif.set_color_by_gradient(BLUE)
         tri_dif.set_fill(opacity=0.5)
@@ -162,5 +155,57 @@ class diffusion_scene(Scene):
         self.play(Write(Dc))
         self.wait(1)
         self.play(Write(dif_condition))
+        self.wait(1)
         self.play(Create(highlight))
+        self.wait(1)
+        self.play(FadeOut(no_dif_group,parameteres_text,Dc,dif_condition,highlight))
+        self.wait(3)
+
+class forest_example_scene(Scene):
+    def construct(self):
+        forest_text = Text("Forest Fire Example:", font_size=30, weight=SEMIBOLD).shift(UP*2 + LEFT*3)
+        box = Rectangle(width=7.0, height=4.0, stroke_color=LIGHT_BROWN, fill_color=YELLOW_D, fill_opacity=0.5).shift(0.5*DOWN)
+        fire = ImageMobject("C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/images/rds/fire.png")
+        tree = ImageMobject("C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/images/rds/burnt_tree.png")
+
+        fire_pos = [
+            [-2.5, 1, 0],[-2, -0.85, 0],[-0.2, -2, 0],
+            [0, 0, 0],[1.75, -0.5, 0],[2, -1.8, 0],[2.5, 0.8, 0]
+          ]
+           #same positions as in act_pos(morphogen_scene)
+
+        inb_pos = [
+            [-2.5, -0.85, 0],[-1.5, -0.85, 0],[-2, -0.35, 0],   #fighter1
+            [-0.5, 0, 0], [0.5, 0, 0], [0, 0.5, 0],             #fighter2
+            [1.25, -0.5, 0],[2.25, -0.5, 0],[1.75, 0, 0],       #fighter3
+            [1.25, 1, 0],[-0.5, -0.75, 0],[-2.25, -2, 0]        #fighter-start
+           ]
+
+        fire_group = Group(*[fire.copy().shift(pos).scale(0.3) for pos in fire_pos])
+        fighter_group = VGroup(*[inb.copy().shift(pos).scale(0.7) for pos in inb_pos])
+        tree_group = Group(*[tree.copy().shift(pos).scale(3) for pos in fire_pos])
+
+        fire_legend = fire.scale(0.2).next_to(box, DOWN+2.5*LEFT)
+        inb_legend = inb.scale(0.5).next_to(fire_legend, DOWN*0.75)
+        tree_legend = ImageMobject("C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/images/rds/white_tree.png").scale(2).next_to(inb_legend, DOWN*0.75)
+
+        fire_text = Text('fire  (activator)',font_size=20, weight=BOOK).next_to(fire_legend, RIGHT*1.5)
+        inb_text = Text('fire fighter  (inhibitor)',font_size=20, weight=BOOK).next_to(inb_legend, RIGHT*1.5)
+        tree_text = Text('burnt trees',font_size=20, weight=BOOK).next_to(tree_legend, RIGHT*1.5)
+       
+        
+        self.add(title_diffusion,diffusion_text,box_dif)
+        self.wait(1)
+        self.play(Transform(title_diffusion,title_sub), Transform(box_dif,box), Transform(diffusion_text, forest_text))
+        self.wait(1)
+        self.play(FadeIn(fire_legend,inb_legend,tree_legend,fire_text,inb_text,tree_text))
+        self.wait(1)
+
+        self.play(FadeIn(fire_group[3], fighter_group[9:]))
+        self.wait(1)
+        self.play(FadeIn(fire_group[1], fire_group[4]))
+        self.wait(1)
+        self.play(ReplacementTransform(fighter_group[9:],fighter_group[:9]))
+        self.wait(1)
+        self.play(FadeOut(fire_group[3],fire_group[1], fire_group[4],fighter_group[:9]), FadeIn(tree_group))
         self.wait(3)
