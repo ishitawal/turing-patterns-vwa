@@ -17,25 +17,19 @@ class subtitle_rds_scene(Scene):
 
 class morphogens_scene(Scene):
     def construct(self):
-        act_1 = act.copy().shift([-2.5,1,0])
-        act_2 = act.copy().shift([-2, -0.85, 0])
-        act_3 = act.copy().shift([1.75, -0.5, 0])
-        act_4 = act.copy().shift([2.5, 0.8, 0])
-        act_5 = act.copy().shift([-0.2, -2, 0])
-        act_6 = act.copy().shift([2, -1.8, 0])
         act_legend = act.copy().shift([-3,-3,0]).scale(0.8)
-
-        inb_1 = inb.copy().shift([1.25, 1, 0])
-        inb_2 = inb.copy().shift([-1.25, 0.5, 0])
-        inb_3 = inb.copy().shift([-3, -0.25, 0])
-        inb_4 = inb.copy().shift([2.75, -0.75, 0])
-        inb_5 = inb.copy().shift([-0.5, -0.75, 0])
-        inb_6 = inb.copy().shift([1, -1.25, 0])
-        inb_7 = inb.copy().shift([-2.25, -2, 0])
         inb_legend = inb.copy().shift([-2.5, -3, 0]).scale(0.8)
 
+        inb_pos = [
+            [1.25, 1, 0],[-1.25, 0.5, 0],[-3, -0.25, 0],[2.75, -0.75, 0],[-0.5, -0.75, 0],[1, -1.25, 0],[-2.25, -2, 0]
+        ]
+        act_pos = [
+                [-2.5,1,0],[-2, -0.85, 0],[1.75, -0.5, 0],[2.5, 0.8, 0],[-0.2, -2, 0],[2, -1.8, 0]
+        ]
+
+        morphogens = VGroup(*[act.copy().shift(pos) for pos in act_pos], *[inb.copy().shift(pos) for pos in inb_pos])
+
         legend_text = Text("... morphogens", font_size=20, weight=BOOK).shift([-1.25,-3,0])
-        morphogens = VGroup(act, act_1, act_2, act_3,act_4,act_5, act_6, inb_1, inb_2, inb_3, inb_4, inb_5, inb_6, inb_7)
 
         self.add(title_sub)
         self.wait(1)
@@ -65,28 +59,25 @@ class act_inb_dynamics_scene(Scene):
         act = Circle(fill_opacity=0, stroke_color=GREEN, radius=0.2)
         inb = Circle(fill_opacity=1, stroke_color=RED, radius=0.2)
 
-        act_1 = act.copy().shift([-2.25, 0.75, 0])
-        act_2 = act.copy().shift([-2, -0.75, 0])
-        act_3 = act.copy().shift([-1.25, 0.5, 0])
-        act_4 = act.copy().shift([-3, -0.25, 0])
-        act_5 = act.copy().shift([-2.4, -1.75, 0])
-        act_6 = act.copy().shift([-1, -1.5, 0])
         act_7 = act.copy().shift([-0.5, 0.15, 0])
         act_8 = act.copy().shift([-0.8, -0.5, 0])
         act_legend = act.copy().shift([-3,-3,0]).scale(0.8)
 
-        inb_1 = inb.copy().shift([1.25, 0.6, 0])
-        inb_2 = inb.copy().shift([1.75, -0.5, 0])
-        inb_3 = inb.copy().shift([2.5, 0.8, 0])
-        inb_4 = inb.copy().shift([2.75, -0.75, 0])
-        inb_5 = inb.copy().shift([2, -1.8, 0])
         inb_6 = inb.copy().shift([1.2, -1.5, 0])
         inb_7 = inb.copy().shift([1, -0.5, 0])
         inb_legend = inb.copy().shift([-2.5, -3, 0]).scale(0.8)
 
-        act_inb = VGroup(act_1, act_2, act_3, act_4, act_5, act_6, inb_1, inb_2, inb_3, inb_4, inb_5)
         act_new = VGroup(act_7, act_8)
         inb_new = VGroup(inb_6, inb_7)
+
+        inb_pos = [
+            [1.25, 0.6, 0],[1.75, -0.5, 0],[2.5, 0.8, 0],[2.75, -0.75, 0],[2, -1.8, 0]
+        ]
+        act_pos = [
+                [-2.25, 0.75, 0],[-2, -0.75, 0],[-1.25, 0.5, 0],[-3, -0.25, 0],[-2.4, -1.75, 0],[-1, -1.5, 0]
+        ]
+
+        act_inb = VGroup(*[act.copy().shift(pos) for pos in act_pos], *[inb.copy().shift(pos) for pos in inb_pos])
 
         self.add(title_sub, act_inb_text, box,inb_legend,act_legend,legend_text)
         self.wait(1)
