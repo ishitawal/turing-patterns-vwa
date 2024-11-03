@@ -13,6 +13,7 @@ box = Rectangle(width=7.0, height=4.0).shift(0.5*DOWN)
 box_dif= Rectangle(width=8.0, height=2.0).shift(0.5*UP)
 
 
+
 class subtitle_rds_scene(Scene):
     def construct(self):
         title_main = Text("2) Reaction-Diffusion System", font_size=60)
@@ -147,7 +148,7 @@ class diffusion_scene(Scene):
         self.play(*[
              ReplacementTransform(no_dif_group[i], no_dif_group[i].copy().move_to(dif_group[i].get_center()))
             for i in range(len(no_dif_group))
-            ],run_time=2.5)                    #Transform not quite right - position change wrong --> change later
+            ],run_time=2.5)                                                                                              #Transform not quite right - position change wrong --> change later
         self.wait(1)
         self.play(FadeOut(tri_dif,arrow,arrow_text))
         self.wait(1)
@@ -165,6 +166,7 @@ class forest_example_scene(Scene):
     def construct(self):
         forest_text = Text("Forest Fire Example:", font_size=30, weight=SEMIBOLD).shift(UP*2 + LEFT*3)
         box = Rectangle(width=7.0, height=4.0, stroke_color=LIGHT_BROWN, fill_color=YELLOW_D, fill_opacity=0.5).shift(0.5*DOWN)
+        inb = Circle(fill_opacity=1, color=BLUE, radius=0.2)
         fire = ImageMobject("C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/images/rds/fire.png")
         tree = ImageMobject("C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/images/rds/burnt_tree.png")
 
@@ -181,26 +183,25 @@ class forest_example_scene(Scene):
             [1.25, 1, 0],[-0.5, -0.75, 0],[-2.25, -2, 0]        #fighter-start
            ]
 
-        fire_group = Group(*[fire.copy().shift(pos).scale(0.3) for pos in fire_pos])
+        fire_group = Group(*[fire.copy().shift(pos).scale(0.2) for pos in fire_pos])
         fighter_group = VGroup(*[inb.copy().shift(pos).scale(0.7) for pos in inb_pos])
         tree_group = Group(*[tree.copy().shift(pos).scale(3) for pos in fire_pos])
 
         fire_legend = fire.scale(0.2).next_to(box, DOWN+2.5*LEFT)
-        inb_legend = inb.scale(0.5).next_to(fire_legend, DOWN*0.75)
-        tree_legend = ImageMobject("C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/images/rds/white_tree.png").scale(2).next_to(inb_legend, DOWN*0.75)
+        inb_legend = inb.scale(0.5).next_to(fire_legend, DOWN*0.5)
+        tree_legend = ImageMobject("C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/images/rds/white_tree.png").scale(2).next_to(inb_legend, DOWN*0.5)
 
         fire_text = Text('fire  (activator)',font_size=20, weight=BOOK).next_to(fire_legend, RIGHT*1.5)
         inb_text = Text('fire fighter  (inhibitor)',font_size=20, weight=BOOK).next_to(inb_legend, RIGHT*1.5)
-        tree_text = Text('burnt trees',font_size=20, weight=BOOK).next_to(tree_legend, RIGHT*1.5)
+        tree_text = Text('burned trees',font_size=20, weight=BOOK).next_to(tree_legend, RIGHT*1.5)
        
-        
+    ## reaction dynamics 
         self.add(title_diffusion,diffusion_text,box_dif)
         self.wait(1)
         self.play(Transform(title_diffusion,title_sub), Transform(box_dif,box), Transform(diffusion_text, forest_text))
         self.wait(1)
         self.play(FadeIn(fire_legend,inb_legend,tree_legend,fire_text,inb_text,tree_text))
         self.wait(1)
-
         self.play(FadeIn(fire_group[3], fighter_group[9:]))
         self.wait(1)
         self.play(FadeIn(fire_group[1], fire_group[4]))
@@ -208,4 +209,87 @@ class forest_example_scene(Scene):
         self.play(ReplacementTransform(fighter_group[9:],fighter_group[:9]))
         self.wait(1)
         self.play(FadeOut(fire_group[3],fire_group[1], fire_group[4],fighter_group[:9]), FadeIn(tree_group))
+        self.wait(2)
+        self.play(FadeOut(tree_group))
+
+## diffusion (1)
+        inb_ring = Circle(stroke_color=BLUE, fill_opacity=0, radius=0.3)
+        inb_legend_ring = Circle(stroke_color=BLUE, fill_opacity=0, radius=0.1).next_to(fire_legend, DOWN*0.5)
+        inb_group = Group(*[inb_ring.copy().shift(pos) for pos in fire_pos])
+
+        grow_animation = [
+            [GrowFromPoint(inb_ring, inb_ring.get_center()) for inb_ring in inb_group]
+            ]
+        scale_animation = [
+            fire.animate.scale(1.2, about_point=fire.get_center()) for fire in fire_group 
+        ]
+
+        self.play(ReplacementTransform(inb_legend,inb_legend_ring))
+        self.play(FadeIn(fire_group))
+        self.wait(1)
+        self.play(
+            AnimationGroup(
+                *scale_animation, rate_func=exponential_decay, run_time=2
+            )
+        )
+        self.play(
+                    AnimationGroup(
+                        *grow_animation, run_time=1, rate_func=linear
+                        )
+        )
+        self.wait(1)
+        self.play(FadeOut(fire_group),FadeIn(tree_group), FadeOut(inb_group))
+        self.wait(1)
+        self.play(FadeOut(tree_group))
+        
+# diffusion (2)       
+        for fire in fire_group:
+            fire.scale(1/1.2, about_point=fire.get_center())
+        inb_ring_2 = Circle(stroke_color=BLUE, fill_opacity=0, radius=0.5)
+        inb_group_2 = Group(*[inb_ring_2.copy().shift(pos) for pos in fire_pos])
+        grow_animation = [
+            [GrowFromPoint(inb_ring_2, inb_ring_2.get_center()) for inb_ring_2 in inb_group_2]
+            ]
+        scale_animation = [
+            fire.animate.scale(2, about_point=fire.get_center()) for fire in fire_group 
+        ]
+        for tree in tree_group:
+            tree.scale(2, about_point=tree.get_center())
+        
+        self.wait(2)
+        self.play(FadeIn(fire_group))
+        self.wait(1)
+        self.play(
+            AnimationGroup(
+                *scale_animation, rate_func=exponential_decay, run_time=4
+            )
+        )
+        self.play(
+            AnimationGroup(
+                    *grow_animation, run_time=2, rate_func=linear
+            )
+        )
+        self.wait(1)
+        self.play(FadeOut(fire_group),FadeIn(tree_group), FadeOut(inb_group_2))
+        self.play(FadeOut(tree_group))
+        self.wait(3)
+        
+# diffusion (3)   
+        for fire in fire_group:
+            fire.scale(0.5, about_point=fire.get_center())
+        scale_animation = [
+            fire.animate.scale(3, about_point=fire.get_center()) for fire in fire_group                                             #scaling could be more extreme
+        ]
+        box_burned = Rectangle(width=7.0, height=4.0, stroke_color=GRAY_C, fill_color=GRAY_D, fill_opacity=0.8).shift(0.5*DOWN)
+
+        self.wait(2)
+        self.play(FadeIn(fire_group))
+        self.wait(1)
+        self.play(
+            AnimationGroup(
+                *scale_animation, rate_func=exponential_decay, run_time=6
+            )
+        )
+        self.wait(1)
+        self.play(FadeOut(fire_group), Transform(box, box_burned), lag_ratio=0.5)
         self.wait(3)
