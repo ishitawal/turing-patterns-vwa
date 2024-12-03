@@ -15,7 +15,7 @@ forest_text = Text("Forest Fire Example:", font_size=30, weight=SEMIBOLD).shift(
 comparison_text = Text("Comparison - Diffusion:", font_size=30, weight=SEMIBOLD).shift(UP*2 + LEFT*3)
 box = Rectangle(width=7.0, height=4.0).shift(0.5*DOWN)
 box_dif= Rectangle(width=8.0, height=2.0).shift(0.5*UP)
-inset_frame = Rectangle(height=1.5 , width=3, stroke_color=WHITE, fill_opacity=0)
+inset_frame = Rectangle(height=1.5 , width=3, stroke_color=WHITE, fill_opacity=0, stroke_opacity=0.2)
 
 
 class subtitle_rds_scene(Scene):
@@ -158,6 +158,7 @@ class diffusion_scene(Scene):
         self.play(FadeOut(tri_dif,arrow,arrow_text))
         self.wait(1)
         self.play(Write(parameteres_text))
+        self.wait(1)
         self.play(Write(Dc))
         self.wait(1)
         self.play(Write(dif_condition))
@@ -305,10 +306,9 @@ class forest_example_scene(Scene):
         self.wait(1)
         self.play(FadeOut(fire_group), ReplacementTransform(box, box_burned), lag_ratio=0.5)
         self.add(box_burned)
-        self.wait(1)
-        self.play(FadeOut(box_burned, box, inb_legend_ring, fire_legend, tree_legend, inb_text, fire_text, tree_text, forest_text, numbering3))                 ## at the end the yellow box is not fading out?!
+        self.wait(2)
+        self.play(FadeOut(box_burned, inb_legend_ring, fire_legend, tree_legend, inb_text, fire_text, tree_text, forest_text, numbering3))                 ## at the end the yellow box is not fading out?!
         self.wait(3)
-
 
 class diffusion_rate_comparison(Scene):
     def construct(self):
@@ -326,8 +326,11 @@ class diffusion_rate_comparison(Scene):
 
         
 
-        self.add(title_sub, number1, number2, number3, frame1, frame2, frame3,dif1, dif2, dif3)
-        self.play(FadeIn(video1))
-        self.wait(8)
-
-        ##Trying to include a video segment in a scene - tried VideoMobject command (not available) and now trying creating individual frames
+        self.add(title_sub, number1, number2, number3, frame1, frame2, frame3)
+        self.wait(3)
+        self.play(Write(dif1))
+        self.wait(3)
+        self.play(Write(dif2))
+        self.wait(3)
+        self.play(Write(dif3))
+        self.wait(3)
