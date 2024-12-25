@@ -1,7 +1,5 @@
 from manim import *
 
-#ffmpeg -i forest_example_scene.mp4 frame_%04d.png
-
 act = Circle(fill_opacity=0, stroke_color=GREEN, radius=0.2)
 inb = Circle(fill_opacity=1, stroke_color=RED, radius=0.2)
 title_sub = Text("Reaction-Diffusion System", font_size=40).shift(UP*3 + LEFT*3.5)
@@ -333,4 +331,6 @@ class diffusion_rate_comparison(Scene):
         self.play(Write(dif2))
         self.wait(3)
         self.play(Write(dif3))
+        self.wait(3)
+        self.play(FadeOut(number1, number2, number3, frame1, frame2, frame3, dif1, dif2, dif3))
         self.wait(3)
