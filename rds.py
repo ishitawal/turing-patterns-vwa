@@ -113,7 +113,8 @@ class diffusion_scene(Scene):
         arrow = Arrow(start=[-4,-3,0], end=[4,-3,0], buff=0.0)
         arrow_text = Text("concentration gradient", font_size=20, slant=ITALIC).next_to(arrow, DOWN*0.75)
 
-        molecule = Circle(fill_opacity=0, stroke_color=BLUE, radius=0.1)
+        molecule_A = Circle(fill_opacity=0, stroke_color=BLUE, radius=0.1)
+        molecule_B = Triangle(fill_opacity=1, color=MAROON).scale(0.1)
 
         no_dif_pos = [
             [-2.125,1.375,0],[-2,0.625,0],[-1.625,1.25,0],[-2.5,0.875,0],[-2.2,0.125,0],[-1.5,0.25,0]
@@ -122,8 +123,9 @@ class diffusion_scene(Scene):
             [-3.5, 1.0, 0],[-2.5, -0.2, 0],[-1.75, 1.25, 0],[0.0, 0.75, 0],[2.25, -0.25, 0],[3.5, 1.0, 0]  
         ]
 
-        no_dif_group = VGroup(*[molecule.copy().shift(pos) for pos in no_dif_pos]).shift(LEFT+0.25 *DOWN)
-        dif_group = VGroup(*[molecule.copy().shift(pos) for pos in dif_pos])
+        no_dif_group = VGroup(*[molecule_A.copy().shift(pos) for pos in no_dif_pos]).shift(LEFT+0.25 *DOWN)
+        dif_group = VGroup(*[molecule_A.copy().shift(pos) for pos in dif_pos])
+        morph_B_group = VGroup(*[molecule_B.copy().shift(pos) for pos in dif_pos])
 
         parameteres_text = MarkupText(f'''
                                       - substance
@@ -141,22 +143,35 @@ class diffusion_scene(Scene):
         self.wait(1)
         self.play(Transform(title_reaction,title_diffusion), Transform(act_inb_text,diffusion_text))
         self.wait(1)
-        self.play(ReplacementTransform(box,box_dif), Create(tri_dif))
+        self.play(ReplacementTransform(box,box_dif), Create(tri_dif), FadeIn(no_dif_group))
         self.wait(1)
-        self.play(Create(arrow),Write(arrow_text))
-        self.wait(1)
-        self.play(FadeIn(no_dif_group))
-        self.wait(1)
-        self.play(*[
-             ReplacementTransform(no_dif_group[i], no_dif_group[i].copy().move_to(dif_group[i].get_center()))
+
+        replacement_animations_nodif_dif = [
+            ReplacementTransform(no_dif_group[i], no_dif_group[i].copy().move_to(dif_group[i].get_center()))
             for i in range(len(no_dif_group))
-            ],run_time=2.5)                                                                                             
-                                                                                                                        #Transform not quite right - position change wrong --> change later
+            ]
+
+        self.play(Create(arrow),Write(arrow_text), *replacement_animations_nodif_dif, run_time = 2.5)
         self.wait(1)
+
+        replacement_animations_dif_morph = [
+           ReplacementTransform(no_dif_group[i], morph_B_group[i].copy().move_to(dif_group[i].get_center()))
+            for i in range(len(dif_group))
+        ]
+        self.play(*replacement_animations_dif_morph)
+        self.wait(1)
+        
+        scale_animations = [
+            no_dif_group[i].animate.scale(1.5, about_point=dif_group[i].get_center())
+            for i in range(len(dif_group))
+        ]
         self.play(FadeOut(tri_dif,arrow,arrow_text))
         self.wait(1)
-        self.play(Write(parameteres_text))
+        self.play(Write(parameteres_text), *scale_animations)
+
         self.wait(1)
+        self.play(box_dif.animate.set_fill(WHITE, opacity = 0.4))
+        self.wait(2)
         self.play(Write(Dc))
         self.wait(1)
         self.play(Write(dif_condition))
@@ -169,6 +184,7 @@ class diffusion_scene(Scene):
 class forest_example_scene(Scene):
     def construct(self):
         box = Rectangle(width=7.0, height=4.0, stroke_color=LIGHT_BROWN, fill_color=YELLOW_D, fill_opacity=0.5).shift(0.5*DOWN)
+        box_dif= Rectangle(width=8.0, height=2.0, fill_opacity = 0.4, color=WHITE).shift(0.5*UP)
         inb = Circle(fill_opacity=1, color=BLUE, radius=0.2)
         fire = ImageMobject("C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/images/rds/fire.png")
         tree = ImageMobject("C:/Users/walia/Documents/manim_projects/vwa_manim_video/media/images/rds/burnt_tree.png")
@@ -306,7 +322,7 @@ class forest_example_scene(Scene):
         self.add(box_burned)
         self.wait(2)
         self.play(FadeOut(box_burned, inb_legend_ring, fire_legend, tree_legend, inb_text, fire_text, tree_text, forest_text, numbering3))                 ## at the end the yellow box is not fading out?!
-        self.wait(3)
+        self.wait(3)rds
 
 class diffusion_rate_comparison(Scene):
     def construct(self):
