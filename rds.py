@@ -322,7 +322,7 @@ class forest_example_scene(Scene):
         self.add(box_burned)
         self.wait(2)
         self.play(FadeOut(box_burned, inb_legend_ring, fire_legend, tree_legend, inb_text, fire_text, tree_text, forest_text, numbering3))                 ## at the end the yellow box is not fading out?!
-        self.wait(3)rds
+        self.wait(3)
 
 class diffusion_rate_comparison(Scene):
     def construct(self):
