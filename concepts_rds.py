@@ -58,12 +58,12 @@ class non_linearity(Scene):
         graph = VGroup(ax, labels, curve)
         curve_limit = ax.plot(lambda x: min(0.2 * np.exp(0.6 * x), 3), x_range=[0, 4.5], color=YELLOW).shift(LEFT*3)
         limit = Line([-0.5,0,0],[0.5,0,0], color=RED)
-        limit_text = Text('''
+        limit_text = MarkupText('''
             Limitation:
                                 
-                - finit supply of reactants
+                - finit supply of reactants      
                 - activator-inhibitor dynamic
-        ''', font_size=20).shift(RIGHT*3.5+DOWN)
+        ''', font_size=24).shift(RIGHT*3.5+DOWN)
 
         self.play(ReplacementTransform(sub_title1, sub_title2), FadeOut(line, line_label, increase_formula, curve_label))
         self.wait(1)
@@ -79,4 +79,6 @@ class non_linearity(Scene):
         self.wait(1)
         self.play(Write(dif))
         self.play(Create(box))
+        self.wait(1)
+        self.play(FadeOut(title_concept, sub_title3, dif, box))
         self.wait(5)
