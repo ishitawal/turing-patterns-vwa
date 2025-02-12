@@ -212,7 +212,7 @@ class forest_example_scene(Scene):
 
         fire_text = Text('fire  (activator)',font_size=20, weight=BOOK).next_to(fire_legend, RIGHT*1.5)
         inb_text = Text('fire fighter  (inhibitor)',font_size=20, weight=BOOK).next_to(inb_legend, RIGHT*1.5)
-        tree_text = Text('burned trees',font_size=20, weight=BOOK).next_to(tree_legend, RIGHT*1.5)
+        tree_text = Text('burned trees',font_size=20, weight=BOOK).next_to(tree_legend, RIGHT*1.2)
        
 ## reaction dynamics 
         self.add(title_diffusion,diffusion_text,box_dif)
