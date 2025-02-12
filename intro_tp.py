@@ -10,6 +10,19 @@ class subtitle_intro_tp_scene(Scene):
         self.play(FadeOut(title_main))
         self.wait(2)
 
+class subtitle_hydrothermal_vents_scene(Scene):
+    def construct(self):
+        title_main = Text("""
+        3) Hydrothermal vents
+        
+           and the origin of life""", font_size=60)
+
+        self.wait(1)
+        self.play(Write(title_main))
+        self.wait(1)
+        self.play(FadeOut(title_main))
+        self.wait(2)
+
 
 class morphogenesis(Scene):
     def construct(self):
@@ -49,7 +62,9 @@ class morphogenesis(Scene):
         self.wait(1)
         self.play(ReplacementTransform(morph_text, before_text), ReplacementTransform(pattern_text, after_text), ReplacementTransform(equal, arrow), FadeIn(arrow_text))
         self.wait(2)
-        self.play(FadeOut(box1, box2), definition.animate.shift(UP*3.5))
+        self.play(FadeOut(box1, box2))
+        self.wait(2)
+        self.play(definition.animate.shift(UP*3.5))
         self.wait(1)
         self.play(Create(brace), Create(brace_text))
         self.wait(2)
